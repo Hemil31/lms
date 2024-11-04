@@ -1,0 +1,20 @@
+Project Details:
+- Project Name: Library Management
+- Framework: Laravel 10
+- PHP Version: 8.1
+- Database: PostgreSQL
+- DB Version: 16.4
+
+
+Package:
+- Laravel Passport Package 12.3
+- mongodb/laravel-mongodb
+- spatie/laravel-activitylog
+
+Project Install Command :
+- composer install
+- php artisan migrate
+- php artisan db:seed
+- php artisan passport:install (Set Password grant client key in env file )
+- php artisan serve
+- php artisan schedule:run

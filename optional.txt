@@ -1,0 +1,40 @@
+Foilio package
+    - route
+    - database fecth
+    - blade
+    - middleware
+
+maatwebsite/excel:
+    - Colltetion
+    - import
+    - export
+
+spatie/laravel-activitylog
+    - model implememnt
+    - inbuilit fucntion
+    - migration
+    - config
+
+Resource Collections
+    - https://blog.nonstopio.com/formatting-api-response-in-php-laravel-63ac3a4c4b43
+
+fulltext search
+    - https://xata.io/blog/postgres-full-text-search-engine
+    - https://matthewdaly.co.uk/blog/2017/12/02/full-text-search-with-laravel-and-postgresql/
+
+
+Excel package:
+    - https://laravel-excel.com/
+    - https://magecomp.com/blog/import-excel-file-laravel/
+    - https://www.itsolutionstuff.com/post/laravel-10-import-export-excel-and-csv-file-tutorialexample.html
+
+notification:
+    - https://medium.com/@abboudjoseph2/laravel-notifications-management-part-1-168485a2f379
+
+activitylog:
+    - https://spatie.be/docs/laravel-activitylog/v4/installation-and-setup
+    - https://spatie.be/docs/laravel-activitylog/v4/advanced-usage/logging-model-events
+
+
+
+
