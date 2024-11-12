@@ -2,18 +2,17 @@
 namespace App\Services;
 use App\Repositories\ActivityLogRepository;
 
-
 /**
- * BookServices
+ * ActivityLogServices
  *
- * Provides services related to book management.
+ * Provides services related to Activity Log.
  */
 class ActivityLogServices
 {
     /**
-     * Constructs a new BookServices instance.
+     * Constructs a new Activity Log instance.
      *
-     * @param \App\Repositories\ActivityLogRepository $ActivityLogRepository The book repository instance.
+     * @param \App\Repositories\ActivityLogRepository $ActivityLogRepository The Activity Log repository instance.
      */
     public function __construct(
         protected ActivityLogRepository $activityLogRepository
@@ -29,6 +28,6 @@ class ActivityLogServices
      */
     public function getAllBook()
     {
-        return $this->activityLogRepository->all();
+        return $this->activityLogRepository->paginate();
     }
 }

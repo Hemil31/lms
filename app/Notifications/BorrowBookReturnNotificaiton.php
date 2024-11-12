@@ -2,9 +2,9 @@
 
 namespace App\Notifications;
 
+use App\Notifications\Channels\MongoDBChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Models\Notification as MongoNotification;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -27,7 +27,7 @@ class BorrowBookReturnNotificaiton extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'mongodb'];
+        return ['mail', MongoDBChannel::class];
     }
 
     /**
@@ -39,12 +39,11 @@ class BorrowBookReturnNotificaiton extends Notification implements ShouldQueue
             ->subject('Book Return Notification')
             ->view('emails.book-return', ['book' => $this->borrow]);
     }
+
     /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
+     * Customize database channel to use MongoNotification model.
      */
-    public function toArray(object $notifiable): array
+    public function toMongoDB($notifiable)
     {
         return [
             'user_id' => $notifiable->id,
@@ -55,13 +54,5 @@ class BorrowBookReturnNotificaiton extends Notification implements ShouldQueue
                 'penalty' => $this->borrow['penalty']
             ],
         ];
-    }
-
-    /**
-     * Customize database channel to use MongoNotification model.
-     */
-    public function toDatabase($notifiable)
-    {
-        return MongoNotification::create($this->toArray($notifiable));
     }
 }

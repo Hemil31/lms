@@ -2,7 +2,6 @@
 namespace App\Services;
 use Illuminate\Support\Facades\Auth;
 
-
 /**
  * LoginServices
  *
@@ -45,5 +44,5 @@ class LoginServices
         Auth::user()->token()->revoke();
         return true;
     }
-    
+
 }

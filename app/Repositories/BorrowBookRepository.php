@@ -14,7 +14,7 @@ class BorrowBookRepository extends BaseRepository
         $this->model = $borrowingRecords;
     }
 
-     /**
+    /**
      * Search for borrowing records by user name or book title.
      *
      * @param string $searchTerm
@@ -22,12 +22,12 @@ class BorrowBookRepository extends BaseRepository
      */
     public function searchBorrowingRecords(string $searchTerm)
     {
-        return $this->model->with(['user', 'book'])
+        return $this->model->with(['user:id,name', 'book:id,title'])
             ->whereHas('user', function ($query) use ($searchTerm) {
-                $query->where('name', 'like', '%' . $searchTerm . '%');
+                $query->whereRaw('search_vector @@ websearch_to_tsquery(\'english\', ?)', [$searchTerm]);
             })
             ->orWhereHas('book', function ($query) use ($searchTerm) {
-                $query->where('title', 'like', '%' . $searchTerm . '%');
+                $query->whereRaw('search_vector @@ websearch_to_tsquery(\'english\', ?)', [$searchTerm]);
             })
             ->get();
     }

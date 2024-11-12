@@ -33,11 +33,11 @@ class BorrowingRecordsFactory extends Factory
         Book::where('id', operator: $bookId)->update(['status' => 0]);
 
         return [
-            'user_id' => $this->faker->randomElement($userIdsWithRole3), // Select random user ID with role 3
-            'book_id' => $bookId, // Select random available book ID
+            'user_id' => $this->faker->randomElement($userIdsWithRole3),
+            'book_id' => $bookId,
             'borrowed_at' => $borrowedAt,
             'due_date' => $dueDate,
-            'returned_at' => $returnedAt, // Either a date before due_date or null
+            'returned_at' => $returnedAt,
         ];
     }
 }

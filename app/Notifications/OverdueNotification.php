@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notification;
 class OverdueNotification extends Notification implements ShouldQueue
 {
     use Queueable;
-    
+
     /**
      * Create a new notification instance.
      */
@@ -40,14 +40,18 @@ class OverdueNotification extends Notification implements ShouldQueue
     }
 
     /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
+     * Customize database channel to use MongoNotification model.
      */
-    public function toArray(object $notifiable): array
+    public function toMongoDB($notifiable)
     {
         return [
-            //
+            'user_id' => $notifiable->id,
+            'type' => 'overdue_book',
+            'data' => [
+                'name' => $notifiable->name,
+                'title' => $this->data['title'],
+                'penalty' => $this->data['penalty']
+            ],
         ];
     }
 }

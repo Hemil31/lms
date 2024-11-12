@@ -8,9 +8,9 @@ use App\Traits\JsonResponseTrait;
 use Illuminate\Http\JsonResponse;
 
 /**
- * BookController
+ * ActivityLogController
  *
- * Handles requests related to book management.
+ * Handles requests related to activity logs.
  */
 class ActivityLogController extends Controller
 {
@@ -23,6 +23,13 @@ class ActivityLogController extends Controller
         //
     }
 
+    /**
+     * Index method
+     *
+     * This method ActivityLog data from the database.
+     *
+     * @return JsonResponse
+     */
     public function index(): JsonResponse
     {
         try {

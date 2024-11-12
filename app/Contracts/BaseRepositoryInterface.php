@@ -106,4 +106,11 @@ interface BaseRepositoryInterface
      */
     public function updateById(string $modelId, array $data): ?Model;
 
+    /**
+     * Paginates the models.
+     *
+     * @param int $perPage
+     */
+    public function paginate($perPage, $column, $order);
+
 }

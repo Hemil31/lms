@@ -37,13 +37,12 @@ class BorrowBookController extends Controller
     {
         try {
             $result = $this->borrowBookServices->borrowBookCreate($request->all());
-            
             if (!$result['success']) {
                 return $this->errorResponse($result['message'], 400);
             }
-            return $this->successResponse($result, 'book.borrow', 201);
+            return $this->successResponse($result['data'], 'book.borrow', 201);
         } catch (\Exception $e) {
-            return $this->errorResponse('An error occurred during register' . $e->getMessage(), statusCode: 500);
+            return $this->errorResponse('An error occurred during borrow register' . $e->getMessage(), statusCode: 500);
         }
     }
 
@@ -127,6 +126,20 @@ class BorrowBookController extends Controller
             return $this->successResponse($data, 'book.fetch_all', 200);
         } catch (\Exception $e) {
             return $this->errorResponse('An error occurred during search' . $e->getMessage(), statusCode: 500);
+        }
+    }
+
+    /**
+     * Retrieves a borrowing report.
+     *
+     * @return JsonResponse
+     */
+    public function borrowingReport(Request $request): JsonResponse{
+        try {
+            $data = $this->borrowBookServices->generateBorrowingReport($request->all());
+            return $this->successResponse($data, 'book.fetch_all', 200);
+        } catch (\Exception $e) {
+            return $this->errorResponse('An error occurred during borrowing report ' . $e->getMessage(), statusCode: 500);
         }
     }
 }

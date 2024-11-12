@@ -10,6 +10,7 @@ use App\Repositories\BookRepository;
 use App\Repositories\BorrowBookRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Service class responsible for handling borrow book operations.
@@ -37,42 +38,57 @@ class BorrowBookServices
      */
     public function borrowBookCreate($data)
     {
-        $book = $this->bookRepository->findByUuid($data['book_id']);
-        $user = auth()->user();
-        // if ($book->status->name === BookStatusEnum::NotAvailable->name) {
-        //     return [
-        //         'success' => false,
-        //         'message' => 'book.already_borrowed',
-        //     ];
-        // }
-        $data = array_merge($data, [
-            'user_id' => $user->id,
-            'book_id' => $book->id,
-            'due_date' => $data['due_date']
-        ]);
-        $borrowLimit = Config::get('library.borrow_limit');
-        $currentBorrowedCount = $this->borrowBookRepository->findByColumn([
-            ['user_id', '=', $user->id],
-            ['returned_at', '=', null]
-        ])->count();
-        // if ($currentBorrowedCount >= $borrowLimit) {
-        //     return [
-        //         'success' => false,
-        //         'message' => 'book.limit',
-        //     ];
-        // }
-        $borrowedBook = $this->borrowBookRepository->create($data);
-        $this->bookRepository->updateByUuid($book->uuid, ['status' => '0']);
-        $notificationData = [
-            'name' => $user->name,
-            'title' => $book->title,
-            'duedate' => $data['due_date']
-        ];
-        $user->notify(new BorrowBookNotificaiton($notificationData));
-        return [
-            'success' => true,
-            'data' => $borrowedBook,
-        ];
+        $response = [];
+        try {
+            DB::beginTransaction();
+            $book = $this->bookRepository->findByUuid($data['book_id']);
+            if ($book->status->name === BookStatusEnum::NotAvailable->name) {
+                $response = [
+                    'success' => false,
+                    'message' => 'book.already_borrowed',
+                ];
+            }
+            $user = auth()->user();
+            $data = array_merge($data, [
+                'user_id' => $user->id,
+                'book_id' => $book->id,
+                'due_date' => $data['due_date']
+            ]);
+            $borrowLimit = Config::get('library.borrow_limit');
+            $currentBorrowedCount = $this->borrowBookRepository->findByColumn([
+                ['user_id', '=', $user->id],
+                ['returned_at', '=', null]
+            ])->count();
+            if ($currentBorrowedCount >= $borrowLimit) {
+                $response = [
+                    'success' => false,
+                    'message' => 'book.limit',
+                ];
+            }
+            if (!empty($response)) {
+                DB::rollBack();
+                return $response;
+            }
+            $borrowedBook = $this->borrowBookRepository->create($data);
+            $this->bookRepository->updateByUuid($book->uuid, ['status' => '0']);
+            DB::commit();
+            $notificationData = [
+                'name' => $user->name,
+                'title' => $book->title,
+                'duedate' => $data['due_date']
+            ];
+            $user->notify(new BorrowBookNotificaiton($notificationData));
+            return $response = [
+                'success' => true,
+                'data' => $borrowedBook,
+            ];
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return [
+                'success' => false,
+                'message' => 'An error occurred during borrow register' . $e->getMessage(),
+            ];
+        }
     }
 
     /**
@@ -108,8 +124,9 @@ class BorrowBookServices
                 'message' => 'book.return',
             ];
         }
-        $returnedAt = now();
-        $penalty = max(0, $returnedAt->diffInDays($borrowedBook->due_date)) * Config::get('library.penalty_fee');
+        $penalty = ($returnedAt = now()) > $borrowedBook->due_date
+            ? $returnedAt->diffInDays($borrowedBook->due_date) * Config::get('library.penalty_fee')
+            : 0;
         $borrowedBook->update([
             'returned_at' => $returnedAt,
             'penalty' => $penalty,
@@ -164,7 +181,7 @@ class BorrowBookServices
     {
         $search = [];
         if (isset($data['searchTerm'])) {
-            $search = $this->borrowBookRepository->searchBorrowingRecords($data['searchTerm']);        // }
+            $search = $this->borrowBookRepository->searchBorrowingRecords($data['searchTerm']);
         }
         if (isset($data['due_date'])) {
             $search = $this->borrowBookRepository->findByColumn([
@@ -197,4 +214,18 @@ class BorrowBookServices
         }
     }
 
+    /**
+     * Generates a report of borrowing history by user or book.
+     *
+     * @param array $data The data for generating the report.
+     * @return mixed
+     */
+    public function generateBorrowingReport(array $data)
+    {
+        $search = [];
+        if (isset($data['searchTerm'])) {
+            $search = $this->borrowBookRepository->searchBorrowingRecords($data['searchTerm'])->where('returned_at', '!=', null);
+        }
+        return $search;
+    }
 }

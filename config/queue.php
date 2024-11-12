@@ -35,7 +35,6 @@ return [
 
         'mongodb' => [
             'driver' => 'mongodb',
-            'connection' => 'mongodb',
             'table' => 'jobs',
             'queue' => 'default',
             'expire' => 60,

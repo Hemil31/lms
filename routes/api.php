@@ -48,6 +48,7 @@ Route::middleware('auth:api')->group(function () {
     Route::put('/borrowreturn/{borrowUuid}', [BorrowBookController::class, 'update']);
     Route::get('/borrowedbooks/{bookUuid}', [BorrowBookController::class, 'borrowedBooks']);
     Route::get('/borrowedsearch', [BorrowBookController::class, 'search']);
+    Route::get('/borrowedreport', [BorrowBookController::class, 'borrowingReport']);
 
     //activity log routes
     Route::get('/activitylog', [ActivityLogController::class, 'index']);

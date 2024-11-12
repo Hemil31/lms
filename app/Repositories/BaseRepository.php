@@ -105,9 +105,9 @@ class BaseRepository implements BaseRepositoryInterface
      * @param array $columns
      * @param string $request
      */
-    public function filter($columns, string $request)
+    public function filter($columns, string $request,$perPage = 10)
     {
-        return $this->model->query()->where($columns, 'ILIKE', '%' . $request . '%')->get();
+        return $this->model->query()->where($columns, 'ILIKE', '%' . $request . '%')->paginate($perPage);
     }
 
     /**
@@ -116,9 +116,9 @@ class BaseRepository implements BaseRepositoryInterface
      * @param array $columns
      * @param string $request
      */
-    public function search($search, $column)
+    public function search($search, $column, $perPage = 10)
     {
-        return $this->model->search($search, $column)->get();
+        return $this->model->query()->search($search, $column)->paginate($perPage);
     }
 
     /**
@@ -126,7 +126,7 @@ class BaseRepository implements BaseRepositoryInterface
      *
      * @param array $column
      */
-    public function findByColumn($column=[])
+    public function findByColumn($column = [])
     {
         return $this->model->where($column)->get();
     }
@@ -159,4 +159,15 @@ class BaseRepository implements BaseRepositoryInterface
         $model->update($data);
         return $model;
     }
+
+    /**
+     * Paginates the models.
+     *
+     * @param int $perPage
+     */
+    public function paginate($perPage = 10,$column = 'id', $order = 'asc')
+    {
+        return $this->model->orderBy($column,$order)->paginate($perPage);
+    }
+
 }

@@ -47,10 +47,16 @@ class BaseModel extends Model
         });
     }
 
+    /**
+     * Summary of scopeSearch
+     * @param mixed $query
+     * @param mixed $search
+     * @param mixed $column
+     * @return mixed
+     */
     public function scopeSearch($query, $search, $column)
     {
-        return $query->whereRaw($column . ' @@ to_tsquery(\'english\', ?)', [$search])
-            ->orderByRaw('ts_rank(' . $column . ', to_tsquery(\'english\', ?)) DESC', [$search]);
+        return $query->whereRaw($column . ' @@websearch_to_tsquery(\'english\', ?)', [$search]);
     }
 
 }

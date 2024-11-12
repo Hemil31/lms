@@ -66,7 +66,7 @@ class BookServices
      */
     public function getAllBook()
     {
-        return $this->bookRepository->all();
+        return $this->bookRepository->paginate();
     }
 
     /**
@@ -103,6 +103,10 @@ class BookServices
         }
         if (isset($data['author'])) {
             $search = $this->bookRepository->filter('author', $data['author']);
+        }
+
+        if($search==[]){
+            return response()->json(['message' => 'No record found'], 404);
         }
         return $search;
     }

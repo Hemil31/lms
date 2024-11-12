@@ -119,7 +119,7 @@ return [
     */
 
     'silenced' => [
-        // App\Jobs\ExampleJob::class,
+       App\Notifications\BorrowBookNotificaiton::class,
     ],
 
     /*
