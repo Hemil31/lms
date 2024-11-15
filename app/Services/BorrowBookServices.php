@@ -5,7 +5,8 @@ use App\Enums\BookStatusEnum;
 use App\Enums\RoleEnum;
 use App\Notifications\BorrowBookNotificaiton;
 use App\Notifications\BorrowBookReturnNotificaiton;
-use App\Notifications\OverdueNotification;
+use App\Notifications\DueDateNotification;
+use App\Notifications\OverDueDateNotification;
 use App\Repositories\BookRepository;
 use App\Repositories\BorrowBookRepository;
 use Carbon\Carbon;
@@ -127,6 +128,12 @@ class BorrowBookServices
         $penalty = ($returnedAt = now()) > $borrowedBook->due_date
             ? $returnedAt->diffInDays($borrowedBook->due_date) * Config::get('library.penalty_fee')
             : 0;
+        if ($penalty > 0) {
+            return [
+                'success' => true,
+                'data' => route('payment.form', $borrowedBook->uuid)
+            ];
+        }
         $borrowedBook->update([
             'returned_at' => $returnedAt,
             'penalty' => $penalty,
@@ -197,11 +204,13 @@ class BorrowBookServices
      *
      * @return void
      */
-    public function sendOverdueNotifications()
+    public function sendDueDateNotifications()
     {
-        $twoDaysAgo = Carbon::now()->subDays(2)->format('Y-m-d');
+        $today = now()->format('Y-m-d');
+        $twoDaysAgo = now()->addDays(2)->format('Y-m-d');
         $overdueBooks = $this->borrowBookRepository->findByColumn([
             ['due_date', '<=', $twoDaysAgo],
+            ['due_date', '>=', $today],
             ['returned_at', '=', null]
         ])->load('user:id,name', 'book:id,title');
         foreach ($overdueBooks as $overdue) {
@@ -210,7 +219,33 @@ class BorrowBookServices
                 'bookTitle' => $overdue->book->title,
                 'dueDate' => $overdue->due_date->format('Y-m-d'),
             ];
-            $overdue->user->notify(new OverdueNotification($data));
+            $overdue->user->notify(new DueDateNotification($data));
+        }
+    }
+
+    /**
+     * Sends overdue notifications to users who have not returned their borrowed books.
+     *
+     * @return void
+     */
+    public function sendOverDueDateNotification()
+    {
+        $today = Carbon::now()->format('Y-m-d');
+        $overdueBooks = $this->borrowBookRepository->findByColumn([
+            ['due_date', '<', $today],
+            ['returned_at', '=', null]
+        ])->load('user:id,name', 'book:id,title');
+        foreach ($overdueBooks as $overdue) {
+            $returnedAt = now();
+            $penalty = $returnedAt->diffInDays($overdue->due_date) * Config::get('library.penalty_fee');
+            $data = [
+                'name' => $overdue->user->name,
+                'bookTitle' => $overdue->book->title,
+                'dueDate' => $overdue->due_date->format('Y-m-d'),
+                'penalty' => $penalty,
+                'link' => route('payment.form',  $overdue->uuid)
+            ];
+            $overdue->user->notify(new OverDueDateNotification($data));
         }
     }
 

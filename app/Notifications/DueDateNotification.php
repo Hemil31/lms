@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class OverdueNotification extends Notification implements ShouldQueue
+class DueDateNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -35,8 +35,8 @@ class OverdueNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Overdue Book Notification')
-            ->view('emails.overdue-notification', ['data' => $this->data]);
+            ->subject('Due Date Book Notification')
+            ->view('emails.duedate-notification', ['data' => $this->data]);
     }
 
     /**
@@ -49,8 +49,8 @@ class OverdueNotification extends Notification implements ShouldQueue
             'type' => 'overdue_book',
             'data' => [
                 'name' => $notifiable->name,
-                'title' => $this->data['title'],
-                'penalty' => $this->data['penalty']
+                'title' => $this->data['bookTitle'],
+                'dueDate' => $this->data['dueDate']
             ],
         ];
     }

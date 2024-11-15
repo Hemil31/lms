@@ -10,6 +10,7 @@ Package:
 - Laravel Passport Package 12.3
 - mongodb/laravel-mongodb
 - spatie/laravel-activitylog
+- stripe/stripe-php
 
 Project Install Command :
 - composer install
@@ -17,4 +18,5 @@ Project Install Command :
 - php artisan db:seed
 - php artisan passport:install (Set Password grant client key in env file )
 - php artisan serve
+-php artisan schedule:run
 - php artisan schedule:run

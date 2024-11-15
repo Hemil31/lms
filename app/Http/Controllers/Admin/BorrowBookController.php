@@ -10,7 +10,9 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 /**
- * Controller class responsible for handling borrow book operations.
+ * BorrowBookController
+ *
+ * Handles requests related to Borrow Book.
  */
 class BorrowBookController extends Controller
 {
@@ -76,7 +78,7 @@ class BorrowBookController extends Controller
             if (!$result['success']) {
                 return $this->errorResponse($result['message'], 400);
             }
-            return $this->successResponse($result, 'book.return', 200);
+            return $this->successResponse($result['data'], 'book.borrow', 201);
         } catch (\Exception $e) {
             return $this->errorResponse('An error occurred during borrow book return: ' . $e->getMessage(), 500);
         }

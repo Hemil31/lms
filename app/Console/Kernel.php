@@ -13,9 +13,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->call(function (BorrowBookServices $notificationService) {
-            $notificationService->sendOverdueNotifications();
-        })->daily();
+        $schedule->command('app:over-due-date-notification')->daily();
+        $schedule->command('app:due-date-notification')->daily();
     }
 
     /**

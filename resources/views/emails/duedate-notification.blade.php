@@ -52,9 +52,6 @@
             <p>Dear {{$data['name']}},</p>
             <p>Your borrowed book <strong>"{{ $data['bookTitle'] }}"</strong> is overdue.</p>
             <p>The due date was <strong>{{ $data['dueDate'] }}</strong>. Please return it as soon as possible.</p>
-            <p>The penalty for the overdue book is <strong>${{ $data['penalty'] }}</strong>.</p>
-            <p>You can pay the penalty by clicking the button below:</p>
-            <p><a href="{{ $data['link'] }}" class="button">Pay Penalty</a></p>
         </div>
         <div class="footer">
             <p>Thank you for using our library!</p>

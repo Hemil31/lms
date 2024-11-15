@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\BorrowBookController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -54,4 +55,5 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/activitylog', [ActivityLogController::class, 'index']);
   });
 
-
+Route::get('/payment-success', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('/payment-failed', [PaymentController::class, 'failed'])->name('payment.failed');

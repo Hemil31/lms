@@ -11,4 +11,5 @@ return [
     'import' => 'Book imported successfully',
     'export' => 'Book exported successfully',
     'limit' => 'Book limit reached',
+    'no_penalty' => 'No penalty for this book',
 ];

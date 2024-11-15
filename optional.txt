@@ -44,11 +44,12 @@ offset and limit
 Transaction race
     - https://medium.com/@doniantoro34/how-to-prevent-race-conditions-in-database-3aac965bf47b
 
-
-
-
 seacrh engine
     > elastic search
     - https://dev.to/documatic/how-does-elasticsearch-works-2ffl
     - https://medium.com/@abhirup.acharya009/elastic-search-101-demystifying-elasticsearch-53bff5d0b097
 database engine
+    -
+
+stripe/stripe-php
+    - https://medium.com/areas-producers/how-to-integrate-stripe-api-in-a-laravel-application-dfa3a2301caa
