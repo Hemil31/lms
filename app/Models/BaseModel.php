@@ -16,9 +16,10 @@ class BaseModel extends Model
 {
     use HasFactory;
 
+    const DATE_FORMAT = 'datetime:Y-m-d H:i:s';
     protected $commonCasts = [
-        'created_at' => 'datetime:Y-m-d h:i:s',
-        'updated_at' => 'datetime:Y-m-d h:i:s',
+        'created_at' => self::DATE_FORMAT,
+        'updated_at' => self::DATE_FORMAT,
     ];
 
     /**

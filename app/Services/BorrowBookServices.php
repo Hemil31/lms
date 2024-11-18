@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Services;
-use App\Enums\BookStatusEnum;
 use App\Enums\RoleEnum;
 use App\Notifications\BorrowBookNotificaiton;
 use App\Notifications\BorrowBookReturnNotificaiton;
@@ -43,12 +42,6 @@ class BorrowBookServices
         try {
             DB::beginTransaction();
             $book = $this->bookRepository->findByUuid($data['book_id']);
-            if ($book->status->name === BookStatusEnum::NotAvailable->name) {
-                $response = [
-                    'success' => false,
-                    'message' => 'book.already_borrowed',
-                ];
-            }
             $user = auth()->user();
             $data = array_merge($data, [
                 'user_id' => $user->id,

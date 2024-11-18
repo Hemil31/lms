@@ -12,6 +12,11 @@ enum RoleEnum: int {
     case AdminID       = 2;
     case UserID        = 3;
 
+  /**
+     * Returns a human-readable label for the role.
+     *
+     * @return string The label for the role.
+     */
     public function label(): string
     {
         return match ($this) {

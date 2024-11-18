@@ -18,5 +18,6 @@ Project Install Command :
 - php artisan db:seed
 - php artisan passport:install (Set Password grant client key in env file )
 - php artisan serve
--php artisan schedule:run
 - php artisan schedule:run
+- php artisan queue:listen
+- stripe listen --forward-to http://127.0.0.1:8000/webhook

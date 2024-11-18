@@ -27,6 +27,11 @@ class UserUpdateRequest extends FormRequest
         ];
     }
 
+    /*
+     * Get the validation messages that apply to the request.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [
@@ -38,5 +43,4 @@ class UserUpdateRequest extends FormRequest
             'email.unique' => __('validation.unique'),
         ];
     }
-
 }

@@ -10,4 +10,5 @@ return [
     'exits'=> 'The :attribute field does not exist.',
     'date' => 'The :attribute field must be a date.',
     'after_or_equal' => 'The :attribute must be a date after or equal to :date.',
+    'uuid' => 'The :attribute field must be a valid UUID.'
 ];

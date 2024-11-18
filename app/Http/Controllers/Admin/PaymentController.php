@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BorrowingRecords;
+use App\Models\StripPayment;
 use App\Traits\JsonResponseTrait;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -101,7 +102,7 @@ class PaymentController extends Controller
         $sig_header = $request->header('Stripe-Signature');
         try {
             $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
-
+            \Log::info( $event->type);
             if ($event->type === 'checkout.session.completed') {
                 $session = $event->data->object;
                 $borrowId = $session->metadata->borrow_id;
@@ -113,6 +114,14 @@ class PaymentController extends Controller
                         'returned_at' => now()
                     ]);
                 }
+                StripPayment::create([
+                    'payment_id' => $session->payment_intent,
+                    'user_id' => $borrow->user_id,
+                    'amount' => $penaltyAmount,
+                    'currency' => $session->currency,
+                    'status' => $session->payment_status,
+                    'payment_date' => now(),
+                ]);
             }
             return response('Webhook handled', 200);
         } catch (\Exception $e) {

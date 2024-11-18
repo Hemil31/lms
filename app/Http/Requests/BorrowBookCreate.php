@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\BookStatusEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BorrowBookCreate extends FormRequest
@@ -22,11 +23,31 @@ class BorrowBookCreate extends FormRequest
     public function rules(): array
     {
         return [
-            'book_id' => 'required|string|exists:books,uuid',
+            'book_id' => [
+                'required',
+                'string',
+                'uuid',
+                'exists:books,uuid',
+                function ($attribute, $value, $fail) {
+                    if (!\Illuminate\Support\Str::isUuid($value)) {
+                        $fail(__('validation.uuid'));
+                        return;
+                    }
+                    $book = \App\Models\Book::where('uuid', $value)->first();
+                    if ($book && $book->status !== BookStatusEnum::Available) {
+                        $fail(__('book.already_borrowed'));
+                    }
+                },
+            ],
             'due_date' => 'required|date|after_or_equal:today',
         ];
     }
 
+    /*
+     * Get the validation messages that apply to the request.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [

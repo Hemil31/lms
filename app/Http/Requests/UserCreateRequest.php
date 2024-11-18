@@ -29,6 +29,11 @@ class UserCreateRequest extends FormRequest
         ];
     }
 
+    /*
+     * Get the validation messages that apply to the request.
+     *
+     * @return array<string, string>
+     */
     public function messages(): array
     {
         return [

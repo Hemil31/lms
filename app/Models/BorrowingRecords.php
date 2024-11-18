@@ -18,9 +18,9 @@ class BorrowingRecords extends BaseModel
     ];
 
     protected $casts = [
-        'borrowed_at' => 'datetime:Y-m-d',
-        'due_date' => 'datetime:Y-m-d',
-        'returned_at' => 'datetime:Y-m-d',
+        'borrowed_at' => self::DATE_FORMAT,
+        'due_date' => self::DATE_FORMAT,
+        'returned_at' => self::DATE_FORMAT,
     ];
 
     /**
