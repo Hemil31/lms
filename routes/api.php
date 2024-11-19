@@ -43,13 +43,13 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/bookexport', [BookController::class, 'export'])->middleware('can:book-export');
 
     // borrowing record routes
-    Route::post('/borrow', [BorrowBookController::class, 'store']);
+    Route::post('/borrow', [BorrowBookController::class, 'store'])->middleware('can:borrowing-create');
     Route::get('/borrowlist', [BorrowBookController::class, 'show']);
     Route::get('/borrowhistory', [BorrowBookController::class, 'history']);
-    Route::put('/borrowreturn/{borrowUuid}', [BorrowBookController::class, 'update']);
-    Route::get('/borrowedbooks/{bookUuid}', [BorrowBookController::class, 'borrowedBooks']);
-    Route::get('/borrowedsearch', [BorrowBookController::class, 'search']);
-    Route::get('/borrowedreport', [BorrowBookController::class, 'borrowingReport']);
+    Route::put('/borrowreturn/{borrowUuid}', [BorrowBookController::class, 'update'])->middleware('can:borrowing-update');
+    Route::get('/borrowedbooks/{bookUuid}', [BorrowBookController::class, 'borrowedBooks'])->middleware('can:borrowing-view');
+    Route::get('/borrowedsearch', [BorrowBookController::class, 'search'])->middleware('can:borrowing-list');
+    Route::get('/borrowedreport', [BorrowBookController::class, 'borrowingReport'])->middleware('can:borrowing-list');
 
     //activity log routes
     Route::get('/activitylog', [ActivityLogController::class, 'index']);

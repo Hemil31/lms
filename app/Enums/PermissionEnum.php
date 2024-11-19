@@ -33,7 +33,12 @@ enum PermissionEnum
                     'list'=> 'book-list',
                     'export'=> 'book-export',
                 ],
-
+                'borrowing' => [
+                    'create' => 'borrowing-create',
+                    'update' => 'borrowing-update',
+                    'view' => 'borrowing-view',
+                    'list'=> 'borrowing-list',
+                ],
             ]
         };
     }

@@ -102,7 +102,6 @@ class PaymentController extends Controller
         $sig_header = $request->header('Stripe-Signature');
         try {
             $event = Webhook::constructEvent($payload, $sig_header, $endpoint_secret);
-            \Log::info( $event->type);
             if ($event->type === 'checkout.session.completed') {
                 $session = $event->data->object;
                 $borrowId = $session->metadata->borrow_id;
@@ -123,6 +122,7 @@ class PaymentController extends Controller
                     'payment_date' => now(),
                 ]);
             }
+            
             return response('Webhook handled', 200);
         } catch (\Exception $e) {
             return response('Webhook error', 400);

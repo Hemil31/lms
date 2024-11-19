@@ -55,8 +55,8 @@ class LoginController extends Controller
     public function logout(): JsonResponse
     {
         try {
-            $data = $this->loginServices->logout();
-            return $this->successResponse($data, 'auth.logout');
+            $this->loginServices->logout();
+            return $this->successResponse(null, 'auth.logout');
         } catch (\Exception $e) {
             return $this->errorResponse('An error occurred during logout' . $e->getMessage(), statusCode: 500);
         }

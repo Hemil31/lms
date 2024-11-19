@@ -24,8 +24,8 @@ class BookUpdateRequest extends FormRequest
         return [
             'title' => 'required|string|max:150',
             'author' => 'required|string|max:100',
-            'publication_date' => 'date',
-            'status' => 'required',
+            'publication_date' => 'required|date|before_or_equal:today',
+            'status' => 'boolean',
         ];
     }
 
@@ -43,8 +43,10 @@ class BookUpdateRequest extends FormRequest
             'author.required' => trans('validation.required'),
             'author.string' => trans('validation.string'),
             'author.max' => trans('validation.max'),
+            'publication_date.required' => trans('validation.required'),
             'publication_date.date' => trans('validation.date'),
-            'status.required' => trans('validation.required'),
+            'publication_date.before_or_equal' => __('validation.before_or_equal'),
+            'status.boolean' => trans('validation.boolean'),
         ];
     }
 }
