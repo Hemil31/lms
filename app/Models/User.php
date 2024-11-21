@@ -8,15 +8,16 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
+use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
-
 
 class User extends BaseModel implements
     AuthenticatableContract,
@@ -30,6 +31,7 @@ class User extends BaseModel implements
     use CanResetPassword;
     use Notifiable;
     use LogsActivity;
+    use Searchable;
 
     protected $table = 'users';
 
@@ -98,9 +100,20 @@ class User extends BaseModel implements
     /**
      * A user can have many borrowing records
      */
-    public function borrowingRecords()
+    public function borrowingRecords(): HasMany
     {
         return $this->hasMany(BorrowingRecords::class, 'user_id');
+    }
+
+    /**
+     * A user can have many reviews
+     */
+    public function toSearchableArray(): array
+    {
+        return [
+            'name' => $this->name,
+            'email' => $this->email,
+        ];
     }
 
 }

@@ -1,5 +1,6 @@
 <?php
 namespace App\Services;
+use App\Models\User;
 use App\Repositories\UserRepository;
 
 /**
@@ -83,7 +84,7 @@ class UserServices
     {
         $search = [];
         if (isset($data['search_terms'])) {
-            $search = $this->userRepository->search($data['search_terms'], 'search_vector');
+            $search = User::search($data['search_terms'])->get();
         }
 
         if (isset($data['name'])) {
