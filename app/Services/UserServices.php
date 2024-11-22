@@ -60,7 +60,7 @@ class UserServices
      */
     public function getAllUser()
     {
-        return $this->userRepository->all();
+        return $this->userRepository->paginate();
     }
 
     /**
