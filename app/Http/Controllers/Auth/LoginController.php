@@ -3,62 +3,38 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use App\Services\LoginServices;
-use App\Traits\JsonResponseTrait;
-use Illuminate\Http\JsonResponse;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
-/**
- * LoginController handles authentication and authorization operations.
- */
 class LoginController extends Controller
 {
-    use JsonResponseTrait;
+    /*
+    |--------------------------------------------------------------------------
+    | Login Controller
+    |--------------------------------------------------------------------------
+    |
+    | This controller handles authenticating users for the application and
+    | redirecting them to your home screen. The controller uses a trait
+    | to conveniently provide its functionality to your applications.
+    |
+    */
+
+    use AuthenticatesUsers;
 
     /**
-     * Constructor for the LoginController class.
+     * Where to redirect users after login.
      *
-     * @param LoginServices $loginServices The Login service dependency.
+     * @var string
      */
-    public function __construct(
-        protected LoginServices $loginServices
-    ) {
-        //
-    }
+    protected $redirectTo = '/home';
 
     /**
-     * Handles user login.
+     * Create a new controller instance.
      *
-     * @param LoginRequest $request
-     * @return JsonResponse
+     * @return void
      */
-    public function login(LoginRequest $request): JsonResponse
+    public function __construct()
     {
-        try {
-            $credentials = $request->only('email', 'password');
-            $remember = $request->has('remember');
-            $data = $this->loginServices->login($credentials, $remember);
-            if ($data) {
-                return $this->successResponse($data, 'auth.login');
-            }
-            return $this->errorResponse('auth.invalid_credentials', statusCode: 401);
-        } catch (\Exception $e) {
-            return $this->errorResponse('An error occurred during login' . $e->getMessage(), statusCode: 500);
-        }
-    }
-
-    /**
-     * Handles user logout.
-     *
-     * @return JsonResponse
-     */
-    public function logout(): JsonResponse
-    {
-        try {
-            $this->loginServices->logout();
-            return $this->successResponse(null, 'auth.logout');
-        } catch (\Exception $e) {
-            return $this->errorResponse('An error occurred during logout' . $e->getMessage(), statusCode: 500);
-        }
+        $this->middleware('guest')->except('logout');
+        $this->middleware('auth')->only('logout');
     }
 }

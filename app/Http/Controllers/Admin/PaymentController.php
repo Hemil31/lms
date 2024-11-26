@@ -32,7 +32,7 @@ class PaymentController extends Controller
         $response = null;
         try {
             $borrow = BorrowingRecords::where('uuid', $borrowId)->first();
-            if ($borrow->returned_at) {
+            if (!$borrow->returned_at) {
                 $response = 'book.already_returned';
             }
             $returnedAt = now();
@@ -122,7 +122,7 @@ class PaymentController extends Controller
                     'payment_date' => now(),
                 ]);
             }
-            
+
             return response('Webhook handled', 200);
         } catch (\Exception $e) {
             return response('Webhook error', 400);

@@ -12,4 +12,5 @@ return [
     'export' => 'Book exported successfully',
     'limit' => 'Book limit reached',
     'no_penalty' => 'No penalty for this book',
+    'already_returned' => 'Book already returned',
 ];

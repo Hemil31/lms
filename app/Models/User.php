@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Cashier\Billable;
 use Laravel\Passport\HasApiTokens;
 use Laravel\Scout\Searchable;
 use Spatie\Activitylog\LogOptions;
@@ -32,6 +33,7 @@ class User extends BaseModel implements
     use Notifiable;
     use LogsActivity;
     use Searchable;
+    use Billable;
 
     protected $table = 'users';
 
@@ -116,4 +118,9 @@ class User extends BaseModel implements
         ];
     }
 
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
 }

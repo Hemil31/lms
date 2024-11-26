@@ -12,6 +12,8 @@ class RolesTableSeeder extends Seeder
      */
     public function run(): void
     {
+        Role::truncate();
+
         $roles = ['SuperAdmin','Admin','User' ];
 
         foreach ($roles as $role) {
