@@ -8,16 +8,7 @@ use Illuminate\Http\Request;
 
 class PlanController extends Controller
 {
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct(public Plan $planRepository)
-    {
-    }
-
+    
     /**
      * Get all the plan list
      *
@@ -25,7 +16,7 @@ class PlanController extends Controller
      */
     public function index()
     {
-        $plans = $this->planRepository->all();
+        $plans = Plan::all();
         return view('stripe.index', compact('plans'));
     }
 
@@ -38,7 +29,7 @@ class PlanController extends Controller
      */
     public function show($planId, Request $request)
     {
-        $plan = $this->planRepository->find($planId);
+        $plan = Plan::find($planId);
         $intent = auth()->user()->createSetupIntent();
         return view('stripe.subscription', compact('plan', 'intent'));
     }

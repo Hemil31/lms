@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Stripe\BillingPortalController;
 use App\Http\Controllers\Stripe\PlanController;
 use App\Http\Controllers\Stripe\StripeCheckoutController;
 use App\Http\Controllers\Stripe\StripeWebhookController;
@@ -25,6 +26,8 @@ Route::get('/create-checkout-session/{borrow}/{amount}', [PaymentController::cla
 Route::post('/webhook', [PaymentController::class, 'webhook']);
 
 Auth::routes();
+
+
 Route::post('stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])
     ->name('cashier.webhook')
     ->withoutMiddleware(\App\Http\Middleware\VerifyCsrfToken::class);
@@ -32,6 +35,7 @@ Route::post('stripe/webhook', [StripeWebhookController::class, 'handleWebhook'])
 Route::middleware("auth")->group(function () {
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 
+    // subscription routes
     Route::get('plans', [PlanController::class, 'index'])->name('plans');
     Route::get('plans/{plan}', [PlanController::class, 'show'])->name("plans.show");
 
@@ -41,4 +45,6 @@ Route::middleware("auth")->group(function () {
     // Onetime Payment
     Route::get('/payment', [StripePaymentController::class, 'payment'])->name('payment');
     Route::post('/payment', [StripePaymentController::class, 'processPayment'])->name('process-payment');
+
+    Route::get('/subscription/swap', [StripeCheckoutController::class, 'subscriptionSwap'])->name('subscription.swap');
 });
