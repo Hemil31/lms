@@ -26,7 +26,9 @@ class OverDueDateNotification extends Command
      */
     public function handle()
     {
+        $this->info('Sending over due date notifications...');
         $notificationService = app(BorrowBookServices::class);
         $notificationService->sendOverDueDateNotification();
+        $this->info('Over due date notifications sent.');
     }
 }

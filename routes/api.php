@@ -53,7 +53,15 @@ Route::middleware('auth:api')->group(function () {
 
     //activity log routes
     Route::get('/activitylog', [ActivityLogController::class, 'index']);
-  });
 
+    //charts
+
+});
+
+Route::get('/bookchart', [BookController::class, 'bookChart']);
+Route::get('/borrowedchart', [BorrowBookController::class, 'borrowedChart']);
+Route::get('/userchart', [BorrowBookController::class, 'userChart']);
 Route::get('/payment-success', [PaymentController::class, 'success'])->name('payment.success');
 Route::get('/payment-failed', [PaymentController::class, 'failed'])->name('payment.failed');
+
+

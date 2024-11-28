@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Stripe\BillingPortalController;
 use App\Http\Controllers\Stripe\PlanController;
 use App\Http\Controllers\Stripe\StripeCheckoutController;
 use App\Http\Controllers\Stripe\StripeWebhookController;
@@ -46,5 +45,5 @@ Route::middleware("auth")->group(function () {
     Route::get('/payment', [StripePaymentController::class, 'payment'])->name('payment');
     Route::post('/payment', [StripePaymentController::class, 'processPayment'])->name('process-payment');
 
-    Route::get('/subscription/swap', [StripeCheckoutController::class, 'subscriptionSwap'])->name('subscription.swap');
 });
+

@@ -236,7 +236,7 @@ class BorrowBookServices
                 'bookTitle' => $overdue->book->title,
                 'dueDate' => $overdue->due_date->format('Y-m-d'),
                 'penalty' => $penalty,
-                'link' => route('payment.form',  $overdue->uuid)
+                'link' => route('payment.form', $overdue->uuid)
             ];
             $overdue->user->notify(new OverDueDateNotification($data));
         }
@@ -256,4 +256,72 @@ class BorrowBookServices
         }
         return $search;
     }
+
+    /**
+     * Generates a chart of the top borrowed books.
+     *
+     * @param array $data The data for generating the chart.
+     * @return mixed
+     */
+    public function generateBorrowedChart($data)
+    {
+        if ($data['interval'] === 'weekly') {
+            $start = now()->subWeek();
+            $end = now();
+        } elseif ($data['interval'] === 'monthly') {
+            $start = now()->subMonth();
+            $end = now();
+        } elseif ($data['interval'] === 'yearly') {
+            $start = now()->subYear();
+            $end = now();
+        }
+        $topBooks = DB::table('borrowing_records')
+            ->select('book_id', DB::raw('COUNT(id) as borrows_count'))
+            ->whereBetween('borrowed_at', [$start, $end])
+            ->groupBy('book_id')
+            ->orderByDesc('borrows_count')
+            ->get();
+        $groupedResults = $topBooks->groupBy('borrows_count')->map(function ($group) {
+            return [
+                'borrows_count' => $group->first()->borrows_count,
+                'merged_book_ids' => $group->pluck('book_id')->sort()->values()->all(),
+            ];
+        });
+        return $groupedResults->sortByDesc('borrows_count')->values()->take(10);
+
+    }
+
+    /**
+     * Generates a chart of the top users.
+     *
+     * @param array $data The data for generating the chart.
+     * @return mixed
+     */
+    public function generateUserChart($data)
+    {
+        if ($data['interval'] === 'weekly') {
+            $start = now()->subWeek();
+            $end = now();
+        } elseif ($data['interval'] === 'monthly') {
+            $start = now()->subMonth();
+            $end = now();
+        } elseif ($data['interval'] === 'yearly') {
+            $start = now()->subYear();
+            $end = now();
+        }
+        $topBooks = DB::table('borrowing_records')
+            ->select('user_id', DB::raw('COUNT(id) as borrows_count'))
+            ->whereBetween('borrowed_at', [$start, $end])
+            ->groupBy('user_id')
+            ->orderByDesc('borrows_count')  // Sort by the borrows_count in descending order
+            ->get();
+        $groupedResults = $topBooks->groupBy('borrows_count')->map(function ($group) {
+            return [
+                'borrows_count' => $group->first()->borrows_count,
+                'merged_user_ids' => $group->pluck('user_id')->sort()->values()->all(),
+            ];
+        });
+        return $groupedResults->sortByDesc('borrows_count')->values()->take(10);
+    }
+
 }

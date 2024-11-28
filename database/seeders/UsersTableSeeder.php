@@ -52,5 +52,6 @@ class UsersTableSeeder extends Seeder
             'password' => Hash::make('password'),
             'role_id' => 3,
         ]);
+        User::factory(50)->create();
     }
 }

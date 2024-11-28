@@ -50,28 +50,4 @@ class StripeCheckoutController extends Controller
         return redirect()->route('home')->with('message', 'Subscription has been cancelled.');
     }
 
-
-    // /**
-    //  * Swap the subscription plan for the user.
-    //  *
-    //  * @param Request $request
-    //  * @return \Illuminate\Http\RedirectResponse|\Illuminate\View\View
-    //  */
-    // public function subscriptionSwap(Request $request)
-    // {
-    //     try {
-    //         $user = Auth::user();
-    //         $newPlan = Plan::where('name', $request->plan)->first();
-    //         if (!$newPlan) {
-    //             return redirect()->route('home')->with('error', 'Invalid plan selected.');
-    //         }
-    //         $user->subscription($request->current_plan)
-    //             ->swap($newPlan->stripe_plan);
-
-    //         return redirect()->route('home')->with('message', 'Subscription plan updated successfully.');
-    //     } catch (\Exception $e) {
-    //         $error = $e->getMessage();
-    //         return view('stripe.error', compact('error'));
-    //     }
-    // }
 }

@@ -12,6 +12,6 @@ class BorrowingRecordsTableSeeder extends Seeder
      */
     public function run(): void
     {
-        BorrowingRecords::factory()->count(10)->create();
+        BorrowingRecords::factory()->count(30)->create();
     }
 }

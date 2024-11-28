@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\RoleEnum;
 use App\Models\Plan;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
@@ -26,6 +26,9 @@ class HomeController extends Controller
     public function index()
     {
         $user = Auth::user();
+        if($user->role_id != RoleEnum::UserID->value) {
+            return view('dashboard');
+        }
         $subscriptions = $user->subscriptions;
         $plans = Plan::all();
         return view('home', compact('user', 'subscriptions', 'plans'));

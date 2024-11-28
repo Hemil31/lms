@@ -27,7 +27,7 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->companyEmail(),
             'password' => static::$password ??= Hash::make('password'),
-            'role_id' => rand(1, 3),
+            'role_id' => '3',
         ];
     }
 

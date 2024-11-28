@@ -23,6 +23,7 @@ class BookFactory extends Factory
             'isbn' => $this->faker->unique()->isbn13(),
             'publication_date' => $this->faker->date(),
             'status' => $this->faker->randomElement(['0', '1']),
+            'deleted_at' => $this->faker->optional()->dateTime(),
         ];
     }
 }

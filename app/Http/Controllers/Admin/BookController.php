@@ -164,4 +164,20 @@ class BookController extends Controller
             return $this->errorResponse('An error occurred during export' . $e->getMessage(), statusCode: 500);
         }
     }
+
+    /**
+     * Retrieves the book chart data.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function bookChart(): JsonResponse
+    {
+        try {
+            $data = $this->bookServices->getBookChart();
+            return $this->successResponse($data, 'book.export', 200);
+        } catch (\Exception $e) {
+            return $this->errorResponse('An error occurred during export' . $e->getMessage(), statusCode: 500);
+        }
+    }
 }
+

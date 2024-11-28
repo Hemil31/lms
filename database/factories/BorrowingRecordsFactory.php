@@ -30,7 +30,7 @@ class BorrowingRecordsFactory extends Factory
 
         $bookId = $this->faker->randomElement($availableBookIds);
 
-        Book::where('id', operator: $bookId)->update(['status' => 0]);
+        Book::where('id', $bookId)->update(['status' => 0]);
 
         return [
             'user_id' => $this->faker->randomElement($userIdsWithRole3),

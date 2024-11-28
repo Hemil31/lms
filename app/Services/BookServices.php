@@ -2,6 +2,7 @@
 namespace App\Services;
 use App\Exports\BookExportClass;
 use App\Imports\BookImpotClass;
+use App\Models\Book;
 use App\Repositories\BookRepository;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -105,7 +106,7 @@ class BookServices
             $search = $this->bookRepository->filter('author', $data['author']);
         }
 
-        if($search==[]){
+        if ($search == []) {
             return response()->json(['message' => 'No record found'], 404);
         }
         return $search;
@@ -130,5 +131,27 @@ class BookServices
     public function bookExport()
     {
         return Excel::download(new BookExportClass, 'users.xlsx');
+    }
+    /**
+     * Retrieves the book chart data.
+     *
+     * @return array
+     */
+    public function getBookChart(): array
+    {
+        $data = Book::withTrashed()
+            ->selectRaw('
+            COUNT(CASE WHEN deleted_at IS NOT NULL THEN 1 END) as deleted,
+            COUNT(CASE WHEN deleted_at IS NULL AND CAST(status AS INTEGER) = 1 THEN 1 END) as active,
+            COUNT(CASE WHEN deleted_at IS NULL AND CAST(status AS INTEGER) = 0 THEN 1 END) as inactive
+        ')
+        ->first();
+        $data = [
+            'deleted' => $data->deleted,
+            'active' => $data->active,
+            'inactive' => $data->inactive,
+            'total' => $data->deleted + $data->active + $data->inactive
+        ];
+        return $data;
     }
 }

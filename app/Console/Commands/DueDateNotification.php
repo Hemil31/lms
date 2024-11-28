@@ -26,8 +26,9 @@ class DueDateNotification extends Command
      */
     public function handle()
     {
-      
+        $this->info('Sending due date notifications...');
         $notificationService = app(BorrowBookServices::class);
         $notificationService->sendDueDateNotifications();
+        $this->info('Due date notifications sent.');
     }
 }

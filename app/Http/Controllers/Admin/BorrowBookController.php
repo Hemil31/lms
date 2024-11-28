@@ -144,4 +144,32 @@ class BorrowBookController extends Controller
             return $this->errorResponse('An error occurred during borrowing report ' . $e->getMessage(), statusCode: 500);
         }
     }
+
+    /**
+     * Retrieves a borrowing report.
+     *
+     * @return JsonResponse
+     */
+    public function borrowedChart(Request $request): JsonResponse{
+        try {
+            $data = $this->borrowBookServices->generateBorrowedChart($request->all());
+            return $this->successResponse($data, 'book.fetch_all', 200);
+        } catch (\Exception $e) {
+            return $this->errorResponse('An error occurred during borrowed chart ' . $e->getMessage(), statusCode: 500);
+        }
+    }
+
+    /**
+     * Retrieves a borrowing report.
+     *
+     * @return JsonResponse
+     */
+    public function userChart(Request $request): JsonResponse{
+        try {
+            $data = $this->borrowBookServices->generateUserChart($request->all());
+            return $this->successResponse($data, 'book.fetch_all', 200);
+        } catch (\Exception $e) {
+            return $this->errorResponse('An error occurred during borrowed chart ' . $e->getMessage(), statusCode: 500);
+        }
+    }
 }
