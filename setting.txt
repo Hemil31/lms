@@ -22,6 +22,7 @@ Project Install Command :
 - php artisan schedule:run
 - php artisan queue:listen
 - stripe listen --forward-to http://127.0.0.1:8000/webhook
+- app:refresh-stripe-plans
 - php artisan scout:import "App\Models\User"
 -./meilisearch
 - npm run build
