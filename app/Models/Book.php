@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\BookStatusEnum;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Schema;
 use Spatie\Activitylog\LogOptions;
@@ -57,7 +58,11 @@ class Book extends BaseModel
         });
     }
 
-    public function borrowingRecords()
+    /**
+     * Summary of borrowingRecords
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function borrowingRecords(): HasMany
     {
         return $this->hasMany(BorrowingRecords::class);
     }

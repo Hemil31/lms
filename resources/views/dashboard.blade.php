@@ -46,7 +46,9 @@ h1 {
 
 @endsection
 @section('content')
-
+<a href="{{ url('pulse') }}" class="btn btn-primary">Pulse</a>
+<a href="{{ url('horizon') }}" class="btn btn-primary">Horizon</a>
+<a href="{{ url('telescope') }}" class="btn btn-primary">Telescope</a>
 @include('charts.user')
 <br>
 @include('charts.book')

@@ -119,6 +119,9 @@ class User extends BaseModel implements
     }
 
 
+    /**
+     * A user can have many reviews
+     */
     public function subscriptions()
     {
         return $this->hasMany(Subscription::class);

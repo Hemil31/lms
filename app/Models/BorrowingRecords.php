@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 class BorrowingRecords extends BaseModel
@@ -37,7 +38,7 @@ class BorrowingRecords extends BaseModel
     /**
      * A borrowing record belongs to a user
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
@@ -45,7 +46,7 @@ class BorrowingRecords extends BaseModel
     /**
      * A borrowing record belongs to a book
      */
-    public function book()
+    public function book(): BelongsTo
     {
         return $this->belongsTo(Book::class, 'book_id');
     }
