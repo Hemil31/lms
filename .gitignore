@@ -19,3 +19,7 @@ yarn-error.log
 /.vscode
 .setting.txt
 .optional.txt
+
+**/caddy
+frankenphp
+frankenphp-worker.php
